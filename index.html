@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Etch-a-Sketch</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="styles.css" type="text/css">
+        <link rel="scripts" src="scripts.js">
+    </head>
+    <body>
+        <div class="top-row">
+            <button id="reset">Reset Grid</button>
+            <h1>Etch-a-Sketch</h1>
+            <label for="mode">Choose Colour Mode:</label>
+            <select name="mode" id="mode">
+                <option value="black">Black</option>
+                <option value="random">Random</option>
+                <option value="shade">Shade</option>
+                <option value="color">Color</option>
+            </select>
+        </div>
+    
+        <div id="container">
+
+        </div>
+
+    <script>
+        // Function to create a grid of square divs
+        function createGrid(size=16) {
+            let container = document.getElementById("container");
+            for (let i = 0; i < size; i++) { 
+                // create each row
+                let row = document.createElement("div");
+                row.classList = "row";
+
+                // calculate a height for a decent view
+                let windowHeight = 750;
+                row.style.width = windowHeight + "px";
+                row.style.height = windowHeight / size + "px";
+
+                // Set container width so that its border surrounds grid
+                container.style.width = windowHeight + "px";
+
+                // create each cell
+                for (let j = 0; j < size; j++) {
+                    let cell = document.createElement("div");
+                    cell.classList = "cell";
+                    cell.style.width = windowHeight / size + "px";
+                    cell.style.height = windowHeight / size + "px";
+                    row.appendChild(cell);
+                }
+                container.appendChild(row);
+            }
+        }
+
+        
+        // Clears the grid and allow a new custom sized grid
+        function resetGrid() {
+            let cells = document.querySelectorAll(".cell");
+            let rows = document.querySelectorAll(".row");
+
+            // Remove cells and rows from the DOM
+            cells.forEach((cell) => {
+                
+                cell.remove()
+                
+            })
+            rows.forEach((row) => {
+                
+                row.remove()
+                
+            })
+
+            // prompt for new size
+            let size = -1;
+            while (size === -1) {
+                size = prompt("Enter size of Grid Between 1 and 200");
+                if (Number(size) <= 0 || Number(size) > 200 || !Number(size)) {
+                    size = -1;
+                } else {
+                    size = size;
+                }
+            }
+            
+            // Recreate Grid
+            createGrid(size);
+            colorCells();
+        }
+
+        function colorCells () {
+            let cells = document.querySelectorAll(".cell");
+            cells.forEach((cell) => {
+                cell.addEventListener('mouseover', function () {
+                cell.style.backgroundColor = "black";
+            })
+        })
+        }
+
+        let resetButton = document.getElementById("reset");
+        resetButton.addEventListener('click', function() {
+            resetGrid();
+        })
+
+        createGrid(64);
+        
+        colorCells();
+
+
+
+    </script>
+    </body>
+
+</html>
