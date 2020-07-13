@@ -22,6 +22,7 @@ h1 {
 }
 
 .cell {
+    background-color: rgb(255, 255 ,255);
     border: 1px solid rgb(201, 201, 201);
     display: table-cell;
 

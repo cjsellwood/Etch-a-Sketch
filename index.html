@@ -11,7 +11,7 @@
         <div class="top-row">
             <button id="reset">Reset Grid</button>
             <h1>Etch-a-Sketch</h1>
-            <label for="mode">Choose Colour Mode:</label>
+            <label for="mode">Choose Mode:</label>
             <select name="mode" id="mode">
                 <option value="black">Black</option>
                 <option value="random">Random</option>
@@ -47,6 +47,7 @@
                     cell.classList = "cell";
                     cell.style.width = windowHeight / size + "px";
                     cell.style.height = windowHeight / size + "px";
+                    cell.style.backgroundColor = "rgb(255, 255, 255)";
                     row.appendChild(cell);
                 }
                 container.appendChild(row);
@@ -91,16 +92,67 @@
             let cells = document.querySelectorAll(".cell");
             cells.forEach((cell) => {
                 cell.addEventListener('mouseover', function () {
-                cell.style.backgroundColor = "black";
+
+                let selectedMode = updateMode()
+                if (selectedMode === "black") {
+                    cell.style.backgroundColor = "rgb(0, 0, 0)";
+                } else if (selectedMode === "random") {
+                    const r = Math.random() * 256;
+                    const g = Math.random() * 256;
+                    const b = Math.random() * 256;
+                    cell.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                } else if (selectedMode === "shade") {
+                    let background = cell.style.backgroundColor;
+                    background = background.slice(4, background.length - 1);
+                    let rgb = background.split(", ");
+                    cell.style.backgroundColor = `rgb(${rgb[0] - 25.5}, ${rgb[1] - 25.5}, ${rgb[2] - 25.5})`
+
+                } else if (selectedMode === "color") {
+                    if (consecutiveColor == -1) {
+                        const r = (Math.floor(Math.random() * 256)).toString(16);
+                        const g = (Math.floor(Math.random() * 256)).toString(16);
+                        const b = (Math.floor(Math.random() * 256)).toString(16);
+                        consecutiveColor = `#${r}${g}${b}`;
+                        console.log(consecutiveColor);
+                        cell.style.backgroundColor = consecutiveColor;
+                    } else {
+
+                        let rgb = parseInt(consecutiveColor.slice(1), 16)
+
+                        // Increase color by certain value to cycle
+
+                        console.log(rgb)
+                        let newColor = Number(rgb) + 10000;
+                        if (newColor >= 16777215) {
+                            newColor = 1
+                        }
+                        consecutiveColor = `#${(newColor.toString(16)).padStart(6, '0')}`;
+                        cell.style.backgroundColor = consecutiveColor;
+                        console.log(consecutiveColor);
+                    }
+                    // possibly add hue cycle
+
+                    // random single color
+                }
+                
             })
         })
         }
+
+        function updateMode() {
+            let mode = document.getElementById("mode");
+            let selectedMode = mode.value
+            return selectedMode;
+        }
+        
+
 
         let resetButton = document.getElementById("reset");
         resetButton.addEventListener('click', function() {
             resetGrid();
         })
 
+        var consecutiveColor = -1;
         createGrid(64);
         
         colorCells();
