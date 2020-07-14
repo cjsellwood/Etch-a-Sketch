@@ -1,1 +1,1 @@
-A javascript based sketch pad
+A javascript based sketch pad with multiole selectable modes.
